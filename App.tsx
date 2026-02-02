@@ -36,7 +36,11 @@ const App: React.FC = () => {
   const [editingMatch, setEditingMatch] = useState<MatchResult | null>(null);
   const [showAdminTools, setShowAdminTools] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error' | 'success'>('idle');
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    // 初回のみスプラッシュスクリーンを表示
+    const hasShown = sessionStorage.getItem('splashShown');
+    return !hasShown;
+  });
 
   const syncToCloud = useCallback(async (newData: TournamentData) => {
     setSyncStatus('syncing');
@@ -132,7 +136,10 @@ const App: React.FC = () => {
       {showSplash && (
         <SplashScreen
           isDataReady={data !== null}
-          onFinish={() => setShowSplash(false)}
+          onFinish={() => {
+            sessionStorage.setItem('splashShown', 'true');
+            setShowSplash(false);
+          }}
         />
       )}
       {!showSplash && data && (
