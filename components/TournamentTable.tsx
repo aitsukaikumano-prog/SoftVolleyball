@@ -65,21 +65,29 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
         </div>
         
         <div className="relative">
-          {/* 
-            左側のグラデーションオーバーレイ 
+          {/*
+            固定列の右側の枠線（固定）
+            スクロールしても動かない縦線
+          */}
+          <div
+            className="absolute top-0 bottom-0 left-[70px] border-r border-slate-300 z-30 pointer-events-none"
+          />
+
+          {/*
+            左側のグラデーションオーバーレイ
             固定列(70px)のすぐ右側に配置
           */}
-          <div 
+          <div
             className={`absolute top-0 left-[70px] bottom-0 w-20 bg-gradient-to-r from-white via-white/40 to-transparent z-20 pointer-events-none transition-opacity duration-300 ${
               showLeftGradient ? 'opacity-100' : 'opacity-0'
             }`}
           />
 
-          {/* 
-            右側のグラデーションオーバーレイ 
+          {/*
+            右側のグラデーションオーバーレイ
             幅を広め(w-20)に設定して視認性を向上
           */}
-          <div 
+          <div
             className={`absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-white via-white/40 to-transparent z-20 pointer-events-none transition-opacity duration-300 ${
               showRightGradient ? 'opacity-100' : 'opacity-0'
             }`}
