@@ -39,13 +39,35 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
               {/* 対戦チーム（中央の広いカラム） */}
               <div className="flex flex-col justify-center gap-2 px-3 py-3 border-r border-slate-100">
                 <div className="flex items-center justify-center w-full">
-                  <span className="flex-1 text-[13px] font-black text-slate-900 text-right leading-tight break-words">
+                  <span className={`flex-1 text-[13px] font-black text-right leading-tight break-words transition-all ${
+                    match.isCompleted
+                      ? team1Sets > team2Sets
+                        ? 'text-indigo-600 scale-105'
+                        : team1Sets < team2Sets
+                        ? 'text-slate-400'
+                        : 'text-slate-700'
+                      : 'text-slate-900'
+                  }`}>
                     {getTeamName(match.team1Id)}
+                    {match.isCompleted && team1Sets > team2Sets && (
+                      <i className="fas fa-crown text-[10px] ml-1 text-yellow-500"></i>
+                    )}
                   </span>
                   <div className="mx-2 shrink-0 flex flex-col items-center">
                     <span className="text-[9px] font-black text-slate-300 italic tracking-tighter">VS</span>
                   </div>
-                  <span className="flex-1 text-[13px] font-black text-slate-900 text-left leading-tight break-words">
+                  <span className={`flex-1 text-[13px] font-black text-left leading-tight break-words transition-all ${
+                    match.isCompleted
+                      ? team2Sets > team1Sets
+                        ? 'text-indigo-600 scale-105'
+                        : team2Sets < team1Sets
+                        ? 'text-slate-400'
+                        : 'text-slate-700'
+                      : 'text-slate-900'
+                  }`}>
+                    {match.isCompleted && team2Sets > team1Sets && (
+                      <i className="fas fa-crown text-[10px] mr-1 text-yellow-500"></i>
+                    )}
                     {getTeamName(match.team2Id)}
                   </span>
                 </div>
@@ -53,14 +75,33 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                 {/* 状況・結果表示 */}
                 <div className="flex justify-center">
                   {match.isCompleted ? (
-                    <div className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50">
-                      <span className="w-4 text-center">{team1Sets}</span>
-                      <span className="opacity-40 text-[10px] font-light">-</span>
-                      <span className="w-4 text-center">{team2Sets}</span>
-                    </div>
+                    role === UserRole.ADMIN ? (
+                      <button
+                        onClick={() => onEdit(match)}
+                        className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50 hover:bg-indigo-700 active:scale-95 transition-all cursor-pointer"
+                      >
+                        <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
+                          {team1Sets}
+                        </span>
+                        <span className="opacity-40 text-[10px] font-light">-</span>
+                        <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
+                          {team2Sets}
+                        </span>
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50">
+                        <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
+                          {team1Sets}
+                        </span>
+                        <span className="opacity-40 text-[10px] font-light">-</span>
+                        <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
+                          {team2Sets}
+                        </span>
+                      </div>
+                    )
                   ) : (
                     role === UserRole.ADMIN ? (
-                      <button 
+                      <button
                         onClick={() => onEdit(match)}
                         className="text-[10px] font-black text-indigo-600 bg-white px-5 py-1.5 rounded-full border border-indigo-200 shadow-sm hover:bg-indigo-50 active:scale-95 transition-all"
                       >
