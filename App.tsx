@@ -24,13 +24,8 @@ const App: React.FC = () => {
     lastUpdated: new Date().toISOString(),
   }), []);
 
-  const [data, setData] = useState<TournamentData>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) { console.error(e); }
-    }
-    return createInitialData();
-  });
+  // Firebaseを優先するため、初期状態はcreateInitialData()を使用
+  const [data, setData] = useState<TournamentData>(createInitialData);
 
   const [role] = useState<UserRole>(() => {
     const params = new URLSearchParams(window.location.search);
@@ -50,9 +45,8 @@ const App: React.FC = () => {
       .then((snapshot) => {
         if (snapshot.exists()) {
           const cloudData = snapshot.val();
-          if (new Date(cloudData.lastUpdated) > new Date(data.lastUpdated)) {
-            setData(cloudData);
-          }
+          // Firebaseデータを常に優先
+          setData(cloudData);
         }
         setSyncStatus('success');
       })
@@ -60,7 +54,7 @@ const App: React.FC = () => {
         console.error('Sync error:', error);
         setSyncStatus('error');
       });
-  }, [data.lastUpdated]);
+  }, []);
 
   const syncToCloud = async (newData: TournamentData) => {
     setSyncStatus('syncing');
@@ -83,15 +77,14 @@ const App: React.FC = () => {
     const unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         const cloudData = snapshot.val();
-        if (new Date(cloudData.lastUpdated) > new Date(data.lastUpdated)) {
-          setData(cloudData);
-          setSyncStatus('success');
-        }
+        // Firebaseデータを常に優先
+        setData(cloudData);
+        setSyncStatus('success');
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [syncFromCloud]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
