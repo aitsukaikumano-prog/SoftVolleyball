@@ -9,9 +9,10 @@ import MatchList from './components/MatchList';
 import AdminTools from './components/AdminTools';
 import ScoreModal from './components/ScoreModal';
 import TournamentTable from './components/TournamentTable';
+import { database, ref, set, onValue, get } from './firebase';
 
 const STORAGE_KEY = 'softvolley_local_data_v1';
-const CLOUD_API = 'https://kvdb.io/A2W278mS3zLhW8WvXz6m9j/default_tournament';
+const DB_PATH = 'tournament';
 
 const App: React.FC = () => {
   // 表示モードの定義と初期値の設定：対戦カード(matches)を最初に
@@ -41,40 +42,56 @@ const App: React.FC = () => {
   const [showAdminTools, setShowAdminTools] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error' | 'success'>('idle');
 
-  const syncFromCloud = useCallback(async () => {
+  const syncFromCloud = useCallback(() => {
     setSyncStatus('syncing');
-    try {
-      const response = await fetch(`${CLOUD_API}?t=${Date.now()}`);
-      if (response.ok) {
-        const cloudData = await response.json();
-        if (new Date(cloudData.lastUpdated) > new Date(data.lastUpdated)) {
-          setData(cloudData);
+    const dbRef = ref(database, DB_PATH);
+
+    get(dbRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const cloudData = snapshot.val();
+          if (new Date(cloudData.lastUpdated) > new Date(data.lastUpdated)) {
+            setData(cloudData);
+          }
         }
         setSyncStatus('success');
-      }
-    } catch (e) {
-      setSyncStatus('error');
-    }
+      })
+      .catch((error) => {
+        console.error('Sync error:', error);
+        setSyncStatus('error');
+      });
   }, [data.lastUpdated]);
 
   const syncToCloud = async (newData: TournamentData) => {
     setSyncStatus('syncing');
     try {
-      await fetch(CLOUD_API, {
-        method: 'POST',
-        body: JSON.stringify(newData),
-      });
+      const dbRef = ref(database, DB_PATH);
+      await set(dbRef, newData);
       setSyncStatus('success');
-    } catch (e) {
+    } catch (error) {
+      console.error('Save error:', error);
       setSyncStatus('error');
     }
   };
 
   useEffect(() => {
+    // 初回読み込み
     syncFromCloud();
-    const timer = setInterval(syncFromCloud, 30000);
-    return () => clearInterval(timer);
-  }, [syncFromCloud]);
+
+    // リアルタイム同期を設定
+    const dbRef = ref(database, DB_PATH);
+    const unsubscribe = onValue(dbRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const cloudData = snapshot.val();
+        if (new Date(cloudData.lastUpdated) > new Date(data.lastUpdated)) {
+          setData(cloudData);
+          setSyncStatus('success');
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -95,8 +112,19 @@ const App: React.FC = () => {
   const resetData = () => {
     if (window.confirm('全てのデータをリセットしますか？')) {
       const initial = createInitialData();
-      setData(initial);
-      syncToCloud(initial);
+      // 全試合を未完了にし、スコアを0にリセット
+      const resetMatches = initial.matches.map(match => ({
+        ...match,
+        sets: match.sets.map(() => ({ team1: 0, team2: 0 })),
+        isCompleted: false
+      }));
+      const emptyData = {
+        ...initial,
+        matches: resetMatches,
+        lastUpdated: new Date().toISOString()
+      };
+      setData(emptyData);
+      syncToCloud(emptyData);
       setShowAdminTools(false);
     }
   };
