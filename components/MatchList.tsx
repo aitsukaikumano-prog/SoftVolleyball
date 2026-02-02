@@ -94,8 +94,8 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                           </span>
                         </div>
                       )}
-                      <div className="text-[10px] text-slate-600 font-bold">
-                        ({match.sets.map((set, idx) => `${set.team1}-${set.team2}`).join(', ')})
+                      <div className="text-[12px] text-slate-700 font-bold">
+                        ({match.sets.map((set, idx) => `${set.team1}-${set.team2}`).join(' / ')})
                       </div>
                     </>
                   ) : (
