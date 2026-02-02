@@ -1,0 +1,6 @@
+
+{
+  "name": "矢野町内混成ソフトバーレーボール大会",
+  "description": "A web application for managing soft volleyball tournament scores and rankings for two groups (3-set and 2-set match rules) with admin and spectator roles.",
+  "requestFramePermissions": []
+}
