@@ -177,9 +177,9 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                             {teamStat ? `${teamStat.totalGained} - ${teamStat.totalLost}` : '-'}
                           </div>
                           <div className="border-t border-dotted border-slate-300 w-full"></div>
-                          <div className="flex-1 flex items-center justify-center font-black text-slate-900 text-xl">
+                          <div className="flex-1 flex items-center justify-center font-black text-slate-900 text-xs">
                             {teamStat ? (
-                              teamStat.scoreDiff > 0 ? `${teamStat.scoreDiff}` : 
+                              teamStat.scoreDiff > 0 ? `${teamStat.scoreDiff}` :
                               teamStat.scoreDiff < 0 ? `${teamStat.scoreDiff}` : '0'
                             ) : '-'}
                           </div>

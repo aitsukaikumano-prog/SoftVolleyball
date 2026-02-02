@@ -195,7 +195,7 @@ const App: React.FC = () => {
           Last Sync: {new Date(data.lastUpdated).toLocaleTimeString('ja-JP')}
         </div>
         {role === UserRole.ADMIN && (
-          <div className="text-[8px] text-indigo-500 font-black tracking-[0.2em] uppercase">Admin Management Active</div>
+          <div className="text-[8px] text-indigo-500 font-black tracking-[0.2em]">管理者モード</div>
         )}
       </footer>
     </div>

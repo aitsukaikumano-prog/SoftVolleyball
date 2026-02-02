@@ -91,16 +91,17 @@ const ScoreModal: React.FC<ScoreModalProps> = ({ match, teams, onSave, onCancel 
         </div>
 
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
-            <div className="w-1/3 text-left">{team1Name}</div>
-            <div className="w-1/3 text-center">セットスコア</div>
-            <div className="w-1/3 text-right">{team2Name}</div>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12"></div>
+            <div className="w-full text-center text-xs font-bold text-gray-500">{team1Name}</div>
+            <div className="invisible">-</div>
+            <div className="w-full text-center text-xs font-bold text-gray-500">{team2Name}</div>
           </div>
 
           <div className="space-y-4">
             {sets.map((set, i) => (
               <div key={i} className="flex items-center gap-4">
-                <div className="text-[10px] font-bold text-gray-400 w-8">Set {i+1}</div>
+                <div className="text-[10px] font-bold text-gray-400 w-12 whitespace-nowrap">Set {i+1}</div>
                 <input
                   type="number"
                   inputMode="numeric"
@@ -139,13 +140,13 @@ const ScoreModal: React.FC<ScoreModalProps> = ({ match, teams, onSave, onCancel 
           )}
 
           <div className="mt-8 flex gap-3">
-            <button 
+            <button
               onClick={onCancel}
               className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-200"
             >
               キャンセル
             </button>
-            <button 
+            <button
               onClick={handleComplete}
               className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-200"
             >
