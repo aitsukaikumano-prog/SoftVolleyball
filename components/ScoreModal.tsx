@@ -56,16 +56,24 @@ const ScoreModal: React.FC<ScoreModalProps> = ({ match, teams, onSave, onCancel 
       }
     });
 
-    // 少なくとも1セットは入力が必要
-    const hasInput = sets.some(s => (s.team1 || 0) > 0 || (s.team2 || 0) > 0);
-    if (!hasInput) {
-      validationErrors.push('少なくとも1セットのスコアを入力してください');
-    }
-
     return validationErrors;
   };
 
   const handleComplete = () => {
+    // 全セットが0-0かチェック
+    const allZero = sets.every(s => (s.team1 || 0) === 0 && (s.team2 || 0) === 0);
+
+    // 全セット0-0の場合は未入力状態に戻す
+    if (allZero) {
+      onSave({
+        ...match,
+        sets: sets.map(() => ({ team1: 0, team2: 0 })),
+        isCompleted: false
+      });
+      return;
+    }
+
+    // 通常の入力がある場合はバリデーション
     const validationErrors = validateScores();
     if (validationErrors.length > 0) {
       setErrors(validationErrors);

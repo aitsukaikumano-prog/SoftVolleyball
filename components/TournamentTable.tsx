@@ -140,13 +140,13 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                             <td key={colTeam.id} className="border-r border-slate-500 p-0 h-[90px]">
                               <div className="flex flex-col items-center h-full">
                                 <div className="flex flex-col justify-center flex-grow py-1">
-                                  <div className="space-y-1 text-slate-200 font-sans text-xs">
+                                  <div className="space-y-1 text-slate-800 font-sans text-xs">
                                     {Array.from({ length: config.maxSets }).map((_, i) => (
                                       <div key={i} className="text-center w-8 border-b border-slate-100 last:border-0">-</div>
                                     ))}
                                   </div>
                                 </div>
-                                <div className="w-full text-center py-1 text-[9px] text-slate-300 font-bold bg-slate-50/50">勝点 : -</div>
+                                <div className="w-full text-center py-1 text-[9px] text-slate-800 font-bold bg-slate-50/50">勝点 : -</div>
                               </div>
                             </td>
                           );
@@ -162,7 +162,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                                 {match.sets.map((set, i) => (
                                   <div key={i} className="text-center font-sans py-0.5 leading-none text-[11px] text-slate-800">
                                     <span className="inline-block w-4 text-right">{isTeam1 ? (set.team1 ?? '-') : (set.team2 ?? '-')}</span>
-                                    <span className="mx-1 text-indigo-100 font-light">-</span>
+                                    <span className="mx-1 text-slate-800 font-light">-</span>
                                     <span className="inline-block w-4 text-left">{isTeam1 ? (set.team2 ?? '-') : (set.team1 ?? '-')}</span>
                                   </div>
                                 ))}
