@@ -67,32 +67,37 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                 </div>
                 
                 {/* 状況・結果表示 */}
-                <div className="flex justify-center">
+                <div className="flex flex-col items-center gap-1">
                   {match.isCompleted ? (
-                    role === UserRole.ADMIN ? (
-                      <button
-                        onClick={() => onEdit(match)}
-                        className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50 hover:bg-indigo-700 active:scale-95 transition-all cursor-pointer"
-                      >
-                        <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
-                          {team1Sets}
-                        </span>
-                        <span className="opacity-40 text-[10px] font-light">-</span>
-                        <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
-                          {team2Sets}
-                        </span>
-                      </button>
-                    ) : (
-                      <div className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50">
-                        <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
-                          {team1Sets}
-                        </span>
-                        <span className="opacity-40 text-[10px] font-light">-</span>
-                        <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
-                          {team2Sets}
-                        </span>
+                    <>
+                      {role === UserRole.ADMIN ? (
+                        <button
+                          onClick={() => onEdit(match)}
+                          className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50 hover:bg-indigo-700 active:scale-95 transition-all cursor-pointer"
+                        >
+                          <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
+                            {team1Sets}
+                          </span>
+                          <span className="opacity-40 text-[10px] font-light">-</span>
+                          <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
+                            {team2Sets}
+                          </span>
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-3 bg-indigo-600 px-5 py-1.5 rounded-2xl text-[14px] text-white font-black shadow-lg shadow-indigo-100/50">
+                          <span className={`w-4 text-center ${team1Sets > team2Sets ? 'text-yellow-300' : team1Sets < team2Sets ? 'opacity-50' : ''}`}>
+                            {team1Sets}
+                          </span>
+                          <span className="opacity-40 text-[10px] font-light">-</span>
+                          <span className={`w-4 text-center ${team2Sets > team1Sets ? 'text-yellow-300' : team2Sets < team1Sets ? 'opacity-50' : ''}`}>
+                            {team2Sets}
+                          </span>
+                        </div>
+                      )}
+                      <div className="text-[10px] text-slate-600 font-bold">
+                        ({match.sets.map((set, idx) => `${set.team1}-${set.team2}`).join(', ')})
                       </div>
-                    )
+                    </>
                   ) : (
                     role === UserRole.ADMIN ? (
                       <button
