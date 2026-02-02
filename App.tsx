@@ -11,7 +11,6 @@ import ScoreModal from './components/ScoreModal';
 import TournamentTable from './components/TournamentTable';
 import { database, ref, set, onValue, get } from './firebase';
 
-const STORAGE_KEY = 'softvolley_local_data_v1';
 const DB_PATH = 'tournament';
 
 const App: React.FC = () => {
@@ -86,9 +85,6 @@ const App: React.FC = () => {
     return () => unsubscribe();
   }, [syncFromCloud]);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [data]);
 
   const updateMatch = (updatedMatch: MatchResult) => {
     const newMatches = data.matches.map(m => m.id === updatedMatch.id ? updatedMatch : m);
