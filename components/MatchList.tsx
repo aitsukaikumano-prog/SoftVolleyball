@@ -13,15 +13,15 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
   const getTeamName = (id: string) => teams.find(t => t.id === id)?.name || 'Unknown';
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-lg border border-slate-400 overflow-hidden">
       {/* テーブルヘッダー - カラム比率を再調整 [試合:50px, 対戦チーム:1fr, 審判:140px] */}
-      <div className="grid grid-cols-[50px_1fr_140px] bg-slate-50 border-b border-slate-300 text-center text-[11px] font-black text-slate-700 py-3.5 px-2">
-        <div className="border-r border-slate-200">試合</div>
-        <div className="border-r border-slate-200">対戦チーム</div>
-        <div>審判</div>
+      <div className="grid grid-cols-[50px_1fr_140px] bg-slate-50 border-b border-slate-400 text-center text-[11px] font-black text-slate-700">
+        <div className="border-r border-slate-400 py-3.5 flex items-center justify-center">試合</div>
+        <div className="border-r border-slate-400 py-3.5 flex items-center justify-center">対戦チーム</div>
+        <div className="py-3.5 flex items-center justify-center">審判</div>
       </div>
 
-      <div className="divide-y divide-slate-200">
+      <div className="divide-y divide-slate-400">
         {matches.map(match => {
           const team1Sets = match.sets.filter(s => (s.team1 || 0) > (s.team2 || 0)).length;
           const team2Sets = match.sets.filter(s => (s.team2 || 0) > (s.team1 || 0)).length;
@@ -32,12 +32,12 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
               className={`grid grid-cols-[50px_1fr_140px] items-stretch text-center min-h-[90px] hover:bg-slate-50/50 transition-colors ${match.isCompleted ? 'bg-slate-50/20' : ''}`}
             >
               {/* 試合番号 */}
-              <div className="flex items-center justify-center font-black text-slate-400 text-sm border-r border-slate-100 bg-slate-50/30">
+              <div className="flex items-center justify-center font-black text-slate-400 text-sm border-r border-slate-400 bg-slate-50/30">
                 {match.matchNumber}
               </div>
 
               {/* 対戦チーム（中央の広いカラム） */}
-              <div className="flex flex-col justify-center gap-2 px-3 py-3 border-r border-slate-100">
+              <div className="flex flex-col justify-center gap-2 px-3 py-3 border-r border-slate-400">
                 <div className="flex items-center justify-center w-full">
                   <span className={`flex-1 text-[13px] font-black text-right leading-tight break-words transition-all ${
                     match.isCompleted
@@ -102,7 +102,7 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                         結果入力
                       </button>
                     ) : (
-                      <div className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] bg-slate-100 px-3 py-1 rounded-md border border-slate-200">
+                      <div className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] bg-slate-100 px-3 py-1 rounded-md border border-slate-400">
                         待機中
                       </div>
                     )

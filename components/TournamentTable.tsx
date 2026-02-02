@@ -44,16 +44,16 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
 
   return (
     <div className="relative">
-      <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden mb-6 relative">
+      <div className="bg-white rounded-xl shadow-lg border border-slate-500 overflow-hidden mb-6 relative">
         {/* 表の上部情報セクション */}
-        <div className="flex border-b border-slate-300 min-h-[80px]">
-          <div className="w-1/3 p-2 flex flex-col items-center justify-center border-r border-slate-300 bg-slate-50">
+        <div className="flex border-b border-slate-500 min-h-[80px]">
+          <div className="w-1/3 p-2 flex flex-col items-center justify-center border-r border-slate-500 bg-slate-50">
             <h2 className="text-sm font-black text-slate-800 text-center leading-tight">
               {config.label}<br />
               <span className="text-[11px] font-bold">({groupTeams.length}チーム)</span>
             </h2>
           </div>
-          <div className="w-1/4 p-2 flex items-center justify-center border-r border-slate-300">
+          <div className="w-1/4 p-2 flex items-center justify-center border-r border-slate-500">
             <span className="text-xs font-black text-slate-700 whitespace-nowrap">
               {config.matchType}
             </span>
@@ -70,7 +70,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
             スクロールしても動かない縦線
           */}
           <div
-            className="absolute top-0 bottom-0 left-[70px] border-r border-slate-300 z-30 pointer-events-none"
+            className="absolute top-0 bottom-0 left-[70px] border-r border-slate-500 z-30 pointer-events-none"
           />
 
           {/*
@@ -100,15 +100,15 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
           >
             <table className="w-full text-[10px] border-collapse table-fixed">
               <thead>
-                <tr className="bg-white border-b border-slate-300">
-                  <th className="py-3 px-1 border-r border-slate-300 w-[70px] sticky left-0 bg-white z-30 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]"></th>
+                <tr className="bg-white border-b border-slate-500">
+                  <th className="py-3 px-1 border-r border-slate-500 w-[70px] sticky left-0 bg-white z-30 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)]"></th>
                   {groupTeams.map(team => (
-                    <th key={team.id} className="py-3 px-1 border-r border-slate-300 w-[85px] font-bold text-slate-700 text-center overflow-hidden break-words">
+                    <th key={team.id} className="py-3 px-1 border-r border-slate-500 w-[85px] font-bold text-slate-700 text-center overflow-hidden break-words">
                       <div className="line-clamp-2 leading-tight">{team.name}</div>
                     </th>
                   ))}
-                  <th className="py-3 px-1 border-r-2 border-slate-400 w-[45px] bg-indigo-50 text-indigo-800 font-black text-center">勝点</th>
-                  <th className="py-3 px-1 border-r border-slate-300 w-[70px] bg-slate-50 text-slate-800 font-black text-center">得失点</th>
+                  <th className="py-3 px-1 border-r-2 border-slate-500 w-[45px] bg-indigo-50 text-indigo-800 font-black text-center">勝点</th>
+                  <th className="py-3 px-1 border-r border-slate-500 w-[70px] bg-slate-50 text-slate-800 font-black text-center">得失点</th>
                   <th className="py-3 px-1 w-[45px] bg-slate-50 text-slate-600 font-bold text-center">順位</th>
                 </tr>
               </thead>
@@ -116,8 +116,8 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                 {groupTeams.map(rowTeam => {
                   const teamStat = stats.find(s => s.teamId === rowTeam.id);
                   return (
-                    <tr key={rowTeam.id} className="border-b border-slate-200">
-                      <td className="p-0 border-r border-slate-300 sticky left-0 bg-white z-30 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)] w-[70px] h-[90px]">
+                    <tr key={rowTeam.id} className="border-b border-slate-500">
+                      <td className="p-0 border-r border-slate-500 sticky left-0 bg-white z-30 shadow-[2px_0_8px_-2px_rgba(0,0,0,0.1)] w-[70px] h-[90px]">
                         <div className="flex items-center justify-center h-full px-1">
                           <div className="line-clamp-3 leading-tight font-bold text-slate-700 text-center">{rowTeam.name}</div>
                         </div>
@@ -126,7 +126,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                       {groupTeams.map(colTeam => {
                         if (rowTeam.id === colTeam.id) {
                           return (
-                            <td key={colTeam.id} className="bg-slate-50 border-r border-slate-300 relative p-0 h-[90px]">
+                            <td key={colTeam.id} className="bg-slate-50 border-r border-slate-500 relative p-0 h-[90px]">
                               <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                                 <line x1="0" y1="0" x2="100%" y2="100%" stroke="#cbd5e1" strokeWidth="1" />
                               </svg>
@@ -137,7 +137,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                         const match = findMatchBetweenTeams(matches, rowTeam.id, colTeam.id);
                         if (!match || !match.isCompleted) {
                           return (
-                            <td key={colTeam.id} className="border-r border-slate-300 p-0 h-[90px]">
+                            <td key={colTeam.id} className="border-r border-slate-500 p-0 h-[90px]">
                               <div className="flex flex-col items-center h-full">
                                 <div className="flex flex-col justify-center flex-grow py-1">
                                   <div className="space-y-1 text-slate-200 font-sans text-xs">
@@ -156,7 +156,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                         const points = calculateMatchPoints(match, rowTeam.id);
 
                         return (
-                          <td key={colTeam.id} className="border-r border-slate-300 p-0 h-[90px] hover:bg-slate-50 transition-colors">
+                          <td key={colTeam.id} className="border-r border-slate-500 p-0 h-[90px] hover:bg-slate-50 transition-colors">
                             <div className="flex flex-col items-center justify-center h-full">
                               <div className="flex flex-col justify-center flex-grow py-1">
                                 {match.sets.map((set, i) => (
@@ -175,18 +175,18 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                         );
                       })}
                       
-                      <td className="p-0 border-r-2 border-slate-400 bg-indigo-50/30 h-[90px]">
+                      <td className="p-0 border-r-2 border-slate-500 bg-indigo-50/30 h-[90px]">
                         <div className="flex items-center justify-center h-full font-black text-indigo-700 text-sm">
                           {teamStat?.points || 0}
                         </div>
                       </td>
                       
-                      <td className="p-0 border-r border-slate-300 bg-white h-[90px]">
+                      <td className="p-0 border-r border-slate-500 bg-white h-[90px]">
                         <div className="flex flex-col h-full">
                           <div className="flex-1 flex items-center justify-center font-semibold text-slate-800 text-xs px-1 tracking-tight">
                             {teamStat ? `${teamStat.totalGained} - ${teamStat.totalLost}` : '-'}
                           </div>
-                          <div className="border-t border-dotted border-slate-300 w-full"></div>
+                          <div className="border-t border-dotted border-slate-500 w-full"></div>
                           <div className="flex-1 flex items-center justify-center font-black text-slate-900 text-xs">
                             {teamStat ? (
                               teamStat.scoreDiff > 0 ? `${teamStat.scoreDiff}` :
@@ -201,7 +201,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                           <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-[11px] font-black shadow-sm ${
                             teamStat?.rank === 1 ? 'bg-yellow-400 text-white' : 
                             teamStat?.rank === 2 ? 'bg-slate-300 text-white' : 
-                            teamStat?.rank === 3 ? 'bg-amber-600 text-white' : 'bg-white text-slate-400 border border-slate-200'
+                            teamStat?.rank === 3 ? 'bg-amber-600 text-white' : 'bg-white text-slate-400 border border-slate-500'
                           }`}>
                             {teamStat?.rank || '-'}
                           </span>
