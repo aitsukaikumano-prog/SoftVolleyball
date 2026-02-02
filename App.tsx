@@ -23,8 +23,8 @@ const App: React.FC = () => {
     lastUpdated: new Date().toISOString(),
   }), []);
 
-  // Firebaseを優先するため、初期状態はcreateInitialData()を使用
-  const [data, setData] = useState<TournamentData>(createInitialData);
+  // Firebaseからデータを読み込むまでnull
+  const [data, setData] = useState<TournamentData | null>(null);
 
   const [role] = useState<UserRole>(() => {
     const params = new URLSearchParams(window.location.search);
@@ -36,6 +36,18 @@ const App: React.FC = () => {
   const [showAdminTools, setShowAdminTools] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error' | 'success'>('idle');
 
+  const syncToCloud = useCallback(async (newData: TournamentData) => {
+    setSyncStatus('syncing');
+    try {
+      const dbRef = ref(database, DB_PATH);
+      await set(dbRef, newData);
+      setSyncStatus('success');
+    } catch (error) {
+      console.error('Save error:', error);
+      setSyncStatus('error');
+    }
+  }, []);
+
   const syncFromCloud = useCallback(() => {
     setSyncStatus('syncing');
     const dbRef = ref(database, DB_PATH);
@@ -46,6 +58,11 @@ const App: React.FC = () => {
           const cloudData = snapshot.val();
           // Firebaseデータを常に優先
           setData(cloudData);
+        } else {
+          // Firebaseにデータがない場合は初期データを作成
+          const initialData = createInitialData();
+          setData(initialData);
+          syncToCloud(initialData);
         }
         setSyncStatus('success');
       })
@@ -53,19 +70,7 @@ const App: React.FC = () => {
         console.error('Sync error:', error);
         setSyncStatus('error');
       });
-  }, []);
-
-  const syncToCloud = async (newData: TournamentData) => {
-    setSyncStatus('syncing');
-    try {
-      const dbRef = ref(database, DB_PATH);
-      await set(dbRef, newData);
-      setSyncStatus('success');
-    } catch (error) {
-      console.error('Save error:', error);
-      setSyncStatus('error');
-    }
-  };
+  }, [createInitialData, syncToCloud]);
 
   useEffect(() => {
     // 初回読み込み
@@ -118,13 +123,25 @@ const App: React.FC = () => {
     }
   };
 
+  // データ読み込み中のローディング表示
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 font-bold">データを読み込んでいます...</p>
+        </div>
+      </div>
+    );
+  }
+
   const stats = calculateStats(data.teams, data.matches, activeGroup);
 
   return (
     <div className="min-h-screen pb-24 bg-slate-50">
-      <Header 
-        activeGroup={activeGroup} 
-        onGroupChange={setActiveGroup} 
+      <Header
+        activeGroup={activeGroup}
+        onGroupChange={setActiveGroup}
         role={role}
         syncStatus={syncStatus}
         onToggleAdminTools={() => setShowAdminTools(!showAdminTools)}
