@@ -14,8 +14,8 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
 
   return (
     <div className="bg-white rounded-xl shadow-lg border border-slate-400 overflow-hidden">
-      {/* テーブルヘッダー - カラム比率を再調整 [試合:50px, 対戦チーム:1fr, 審判:120px] */}
-      <div className="grid grid-cols-[50px_1fr_120px] bg-slate-50 border-b border-slate-400 text-center text-[11px] font-black text-slate-700">
+      {/* テーブルヘッダー - カラム比率を再調整 [試合:50px, 対戦チーム:1fr, 審判:110px] */}
+      <div className="grid grid-cols-[50px_1fr_110px] bg-slate-50 border-b border-slate-400 text-center text-[11px] font-black text-slate-700">
         <div className="border-r border-slate-400 py-3.5 flex items-center justify-center">試合</div>
         <div className="border-r border-slate-400 py-3.5 flex items-center justify-center">対戦チーム</div>
         <div className="py-3.5 flex items-center justify-center">審判</div>
@@ -29,7 +29,7 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
           return (
             <div
               key={match.id}
-              className={`grid grid-cols-[50px_1fr_120px] items-stretch text-center min-h-[90px] hover:bg-slate-50/50 transition-colors ${match.isCompleted ? 'bg-slate-50/20' : ''}`}
+              className={`grid grid-cols-[50px_1fr_110px] items-stretch text-center min-h-[90px] hover:bg-slate-50/50 transition-colors ${match.isCompleted ? 'bg-slate-50/20' : ''}`}
             >
               {/* 試合番号 */}
               <div className="flex items-center justify-center font-black text-slate-400 text-sm border-r border-slate-400 bg-slate-50/30">
