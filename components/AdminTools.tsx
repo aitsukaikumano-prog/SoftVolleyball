@@ -25,28 +25,43 @@ const AdminTools: React.FC<AdminToolsProps> = ({ onReset, onClose, role }) => {
             <button onClick={onClose} className="text-slate-400 p-2"><i className="fas fa-times"></i></button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="bg-indigo-50 p-4 rounded-2xl text-center">
-              <span className="text-[10px] font-black text-indigo-600 uppercase mb-2 block">運営用 (入力可)</span>
-              <img src={qrAdmin} alt="Admin QR" className="w-full aspect-square bg-white p-2 rounded-lg mb-3" />
-              <button 
-                onClick={() => { navigator.clipboard.writeText(adminUrl); alert('URLをコピーしました'); }}
-                className="text-[10px] font-bold text-indigo-500 underline"
-              >
-                URLをコピー
-              </button>
+          {role === UserRole.ADMIN ? (
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              <div className="bg-indigo-50 p-4 rounded-2xl text-center">
+                <span className="text-[10px] font-black text-indigo-600 uppercase mb-2 block">運営用 (入力可)</span>
+                <img src={qrAdmin} alt="Admin QR" className="w-full aspect-square bg-white p-2 rounded-lg mb-3" />
+                <button
+                  onClick={() => { navigator.clipboard.writeText(adminUrl); alert('URLをコピーしました'); }}
+                  className="text-[10px] font-bold text-indigo-500 underline"
+                >
+                  URLをコピー
+                </button>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-2xl text-center">
+                <span className="text-[10px] font-black text-slate-500 uppercase mb-2 block">一般用 (閲覧のみ)</span>
+                <img src={qrGeneral} alt="General QR" className="w-full aspect-square bg-white p-2 rounded-lg mb-3" />
+                <button
+                  onClick={() => { navigator.clipboard.writeText(generalUrl); alert('URLをコピーしました'); }}
+                  className="text-[10px] font-bold text-slate-500 underline"
+                >
+                  URLをコピー
+                </button>
+              </div>
             </div>
-            <div className="bg-slate-50 p-4 rounded-2xl text-center">
-              <span className="text-[10px] font-black text-slate-500 uppercase mb-2 block">一般用 (閲覧のみ)</span>
-              <img src={qrGeneral} alt="General QR" className="w-full aspect-square bg-white p-2 rounded-lg mb-3" />
-              <button 
-                onClick={() => { navigator.clipboard.writeText(generalUrl); alert('URLをコピーしました'); }}
-                className="text-[10px] font-bold text-slate-500 underline"
-              >
-                URLをコピー
-              </button>
+          ) : (
+            <div className="flex justify-center mb-8">
+              <div className="bg-slate-50 p-6 rounded-2xl text-center max-w-xs w-full">
+                <span className="text-[10px] font-black text-slate-500 uppercase mb-2 block">一般用 (閲覧のみ)</span>
+                <img src={qrGeneral} alt="General QR" className="w-full aspect-square bg-white p-2 rounded-lg mb-3" />
+                <button
+                  onClick={() => { navigator.clipboard.writeText(generalUrl); alert('URLをコピーしました'); }}
+                  className="text-[10px] font-bold text-slate-500 underline"
+                >
+                  URLをコピー
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {role === UserRole.ADMIN && (
             <div className="pt-6 border-t border-slate-100">

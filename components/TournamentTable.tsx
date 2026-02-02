@@ -138,13 +138,15 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
                         if (!match || !match.isCompleted) {
                           return (
                             <td key={colTeam.id} className="border-r border-slate-300 p-0 h-[90px]">
-                              <div className="flex flex-col items-center justify-center h-full">
-                                <div className="space-y-1 text-slate-200 font-sans text-xs">
-                                  {Array.from({ length: config.maxSets }).map((_, i) => (
-                                    <div key={i} className="text-center w-8 border-b border-slate-100 last:border-0">-</div>
-                                  ))}
+                              <div className="flex flex-col items-center h-full">
+                                <div className="flex flex-col justify-center flex-grow py-1">
+                                  <div className="space-y-1 text-slate-200 font-sans text-xs">
+                                    {Array.from({ length: config.maxSets }).map((_, i) => (
+                                      <div key={i} className="text-center w-8 border-b border-slate-100 last:border-0">-</div>
+                                    ))}
+                                  </div>
                                 </div>
-                                <div className="mt-auto py-1 w-full text-center text-[9px] text-slate-300 font-bold bg-slate-50/50">勝点 : -</div>
+                                <div className="w-full text-center py-1 text-[9px] text-slate-300 font-bold bg-slate-50/50">勝点 : -</div>
                               </div>
                             </td>
                           );

@@ -49,9 +49,6 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                       : 'text-slate-900'
                   }`}>
                     {getTeamName(match.team1Id)}
-                    {match.isCompleted && team1Sets > team2Sets && (
-                      <i className="fas fa-crown text-[10px] ml-1 text-yellow-500"></i>
-                    )}
                   </span>
                   <div className="mx-2 shrink-0 flex flex-col items-center">
                     <span className="text-[9px] font-black text-slate-300 italic tracking-tighter">VS</span>
@@ -65,9 +62,6 @@ const MatchList: React.FC<MatchListProps> = ({ matches, teams, role, onEdit }) =
                         : 'text-slate-700'
                       : 'text-slate-900'
                   }`}>
-                    {match.isCompleted && team2Sets > team1Sets && (
-                      <i className="fas fa-crown text-[10px] mr-1 text-yellow-500"></i>
-                    )}
                     {getTeamName(match.team2Id)}
                   </span>
                 </div>
