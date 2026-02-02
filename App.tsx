@@ -9,6 +9,7 @@ import MatchList from './components/MatchList';
 import AdminTools from './components/AdminTools';
 import ScoreModal from './components/ScoreModal';
 import TournamentTable from './components/TournamentTable';
+import SplashScreen from './components/SplashScreen';
 import { database, ref, set, onValue, get } from './firebase';
 
 const DB_PATH = 'tournament';
@@ -35,6 +36,7 @@ const App: React.FC = () => {
   const [editingMatch, setEditingMatch] = useState<MatchResult | null>(null);
   const [showAdminTools, setShowAdminTools] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'error' | 'success'>('idle');
+  const [showSplash, setShowSplash] = useState(true);
 
   const syncToCloud = useCallback(async (newData: TournamentData) => {
     setSyncStatus('syncing');
@@ -123,21 +125,17 @@ const App: React.FC = () => {
     }
   };
 
-  // データ読み込み中のローディング表示
-  if (!data) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-slate-600 font-bold">データを読み込んでいます...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const stats = calculateStats(data.teams, data.matches, activeGroup);
+  const stats = data ? calculateStats(data.teams, data.matches, activeGroup) : [];
 
   return (
+    <>
+      {showSplash && (
+        <SplashScreen
+          isDataReady={data !== null}
+          onFinish={() => setShowSplash(false)}
+        />
+      )}
+      {!showSplash && data && (
     <div className="min-h-screen pb-24 bg-slate-50">
       <Header
         activeGroup={activeGroup}
@@ -233,6 +231,8 @@ const App: React.FC = () => {
         )}
       </footer>
     </div>
+      )}
+    </>
   );
 };
 
