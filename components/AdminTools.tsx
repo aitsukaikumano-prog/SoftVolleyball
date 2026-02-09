@@ -26,7 +26,7 @@ const AdminTools: React.FC<AdminToolsProps> = ({ onReset, onClose, role }) => {
   };
 
   const shareToLINE = () => {
-    window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, '_blank');
+    window.open(`https://line.me/R/share?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`, '_blank');
   };
 
   const shareToInstagram = () => {
