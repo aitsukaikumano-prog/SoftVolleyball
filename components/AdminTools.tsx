@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UserRole } from '../types';
 
 interface AdminToolsProps {
@@ -9,6 +9,11 @@ interface AdminToolsProps {
 }
 
 const AdminTools: React.FC<AdminToolsProps> = ({ onReset, onClose, role }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
   const baseUrl = window.location.origin + window.location.pathname;
   const adminUrl = `${baseUrl}?role=admin`;
   const generalUrl = `${baseUrl}?role=general`;
