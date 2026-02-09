@@ -11,8 +11,10 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish, isDataReady }) =>
   const [startFadeOut, setStartFadeOut] = useState(false);
   const [animationStep, setAnimationStep] = useState(0);
 
+  const [minTimeReached, setMinTimeReached] = useState(false);
+
+  // アニメーションステップ（マウント時に1回だけ実行）
   useEffect(() => {
-    // リズムを維持しつつ、全体を少しずつ詰めました
     const steps = [
       setTimeout(() => setAnimationStep(1), 400),  // 基礎の光
       setTimeout(() => setAnimationStep(2), 900),  // KUMANO
@@ -21,19 +23,20 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish, isDataReady }) =>
       setTimeout(() => setAnimationStep(5), 2800), // Status Indicator
     ];
 
-    // 全体の表示時間を5.5秒から4.2秒に短縮
-    const minDisplayTime = 4200;
-    const timer = setTimeout(() => {
-      if (isDataReady) {
-        handleExit();
-      }
-    }, minDisplayTime);
+    const minTimer = setTimeout(() => setMinTimeReached(true), 4200);
 
     return () => {
       steps.forEach(clearTimeout);
-      clearTimeout(timer);
+      clearTimeout(minTimer);
     };
-  }, [isDataReady]);
+  }, []);
+
+  // データ準備完了 & 最低表示時間経過で退出
+  useEffect(() => {
+    if (isDataReady && minTimeReached) {
+      handleExit();
+    }
+  }, [isDataReady, minTimeReached]);
 
   const handleExit = () => {
     setStartFadeOut(true);
