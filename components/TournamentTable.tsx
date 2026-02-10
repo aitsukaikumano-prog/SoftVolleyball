@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, forwardRef } from 'react';
 import { Team, MatchResult, TeamStats, GroupType } from '../types';
 import { findMatchBetweenTeams, calculateMatchPoints } from '../logic';
 import { GROUP_CONFIG } from '../constants';
@@ -11,7 +11,7 @@ interface TournamentTableProps {
   group: GroupType;
 }
 
-const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats, group }) => {
+const TournamentTable = forwardRef<HTMLDivElement, TournamentTableProps>(({ teams, matches, stats, group }, ref) => {
   const groupTeams = teams.filter(t => t.group === group);
   const config = GROUP_CONFIG[group];
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
   }, [group, teams.length]);
 
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       <div className="bg-white rounded-xl shadow-lg border border-slate-500 overflow-hidden mb-6 relative">
         {/* 表の上部情報セクション */}
         <div className="flex border-b border-slate-500 min-h-[80px]">
@@ -217,6 +217,8 @@ const TournamentTable: React.FC<TournamentTableProps> = ({ teams, matches, stats
       </div>
     </div>
   );
-};
+});
+
+TournamentTable.displayName = 'TournamentTable';
 
 export default TournamentTable;

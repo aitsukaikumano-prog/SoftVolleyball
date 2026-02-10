@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { UserRole, TournamentData, MatchResult, GroupType } from './types';
 import { INITIAL_TEAMS } from './constants';
 import { generateRoundRobinMatches, calculateStats } from './logic';
@@ -11,6 +11,7 @@ import ScoreModal from './components/ScoreModal';
 import TournamentTable from './components/TournamentTable';
 import SplashScreen from './components/SplashScreen';
 import { database, ref, set, onValue, get } from './firebase';
+import { toPng } from 'html-to-image';
 
 const DB_PATH = 'tournament';
 
@@ -32,6 +33,7 @@ const App: React.FC = () => {
     return params.get('role') === 'admin' ? UserRole.ADMIN : UserRole.GENERAL;
   });
 
+  const tableRef = useRef<HTMLDivElement>(null);
   const [activeGroup, setActiveGroup] = useState<GroupType>('A');
   const [editingMatch, setEditingMatch] = useState<MatchResult | null>(null);
   const [showAdminTools, setShowAdminTools] = useState(false);
@@ -131,6 +133,59 @@ const App: React.FC = () => {
 
   const stats = data ? calculateStats(data.teams, data.matches, activeGroup) : [];
 
+  const handleDownloadTable = async () => {
+    if (!tableRef.current) return;
+
+    // 元の要素をクローンしてキャプチャ専用の要素を作る
+    const clone = tableRef.current.cloneNode(true) as HTMLElement;
+
+    // 画面上に配置するが、ユーザーには見えないようにする
+    clone.style.position = 'fixed';
+    clone.style.left = '0';
+    clone.style.top = '0';
+    clone.style.zIndex = '-1';
+    clone.style.width = 'auto';
+    clone.style.background = '#ffffff';
+    document.body.appendChild(clone);
+
+    // DOM追加後にスタイルを修正（getComputedStyleが正しく動くように）
+    clone.querySelectorAll<HTMLElement>('*').forEach(el => {
+      const s = getComputedStyle(el);
+      if (s.overflow !== 'visible') el.style.overflow = 'visible';
+      if (s.overflowX !== 'visible') el.style.overflowX = 'visible';
+      if (s.overflowY !== 'visible') el.style.overflowY = 'visible';
+      if (s.position === 'sticky') {
+        el.style.position = 'static';
+        el.style.left = 'auto';
+        el.style.boxShadow = 'none';
+      }
+    });
+
+    // table-fixed → auto にして自然な幅にする
+    const table = clone.querySelector('table') as HTMLElement | null;
+    if (table) {
+      table.style.tableLayout = 'auto';
+      table.style.width = 'auto';
+    }
+
+    // グラデーションオーバーレイを非表示
+    clone.querySelectorAll<HTMLElement>('.pointer-events-none').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    try {
+      const dataUrl = await toPng(clone, { pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `グループ${activeGroup}_対戦表.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('画像の保存に失敗しました', err);
+    } finally {
+      document.body.removeChild(clone);
+    }
+  };
+
   return (
     <>
       {showSplash && (
@@ -202,12 +257,22 @@ const App: React.FC = () => {
 
         {viewMode === 'table' && (
           <div className="animate-in fade-in duration-300 overflow-hidden">
-            <TournamentTable 
-              teams={data.teams} 
-              matches={data.matches} 
-              stats={stats} 
-              group={activeGroup} 
+            <TournamentTable
+              ref={tableRef}
+              teams={data.teams}
+              matches={data.matches}
+              stats={stats}
+              group={activeGroup}
             />
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={handleDownloadTable}
+                className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white text-xs font-bold rounded-lg shadow-md hover:bg-slate-700 active:scale-95 transition-all"
+              >
+                <i className="fas fa-download text-[10px]"></i>
+                画像として保存
+              </button>
+            </div>
           </div>
         )}
       </main>
