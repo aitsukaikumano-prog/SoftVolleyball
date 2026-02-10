@@ -136,15 +136,21 @@ const App: React.FC = () => {
   const handleDownloadTable = async () => {
     if (!tableRef.current) return;
 
+    // 元のスクロールコンテナからテーブル全体の幅を取得
+    const origScroll = tableRef.current.querySelector('.overflow-x-auto');
+    const fullWidth = origScroll ? origScroll.scrollWidth : tableRef.current.scrollWidth;
+
     // 元の要素をクローンしてキャプチャ専用の要素を作る
     const clone = tableRef.current.cloneNode(true) as HTMLElement;
 
     // 画面上に配置するが、ユーザーには見えないようにする
+    // テーブル全体が収まる幅を確保する
     clone.style.position = 'fixed';
     clone.style.left = '0';
     clone.style.top = '0';
     clone.style.zIndex = '-1';
-    clone.style.width = 'auto';
+    clone.style.width = `${fullWidth}px`;
+    clone.style.minWidth = `${fullWidth}px`;
     clone.style.background = '#ffffff';
     document.body.appendChild(clone);
 
