@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ activeGroup, onGroupChange, role, syncS
           </div>
           <div className="min-w-0">
             <h1 className="text-[13px] font-black text-slate-800 leading-tight truncate">
-              矢野町内混成ソフトバーレーボール大会
+              矢野ソフトバレーボール大会
             </h1>
             <div className="flex items-center gap-1 mt-0.5" onClick={onRefresh}>
               <span className={`w-1.5 h-1.5 rounded-full ${
